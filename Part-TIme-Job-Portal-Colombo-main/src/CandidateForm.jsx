@@ -71,31 +71,30 @@ export const CandidateForm = () => {
             
             // Add all form fields
             const dataToSend = {
-                ...formData,
+                description: formData.description,
+                minRate: formData.minRate ? parseFloat(formData.minRate) : null,
+                experience: formData.experience ? parseFloat(formData.experience) : null,
+                skills: formData.skills.split(',').map(skill => skill.trim()), // Convert skills string to array
                 userId: parseInt(userId),
                 regionId: parseInt(formData.regionId),
                 ageId: parseInt(formData.ageId),
-                jobTitleId: parseInt(formData.jobTitleId),
-                experience: parseFloat(formData.experience),
-                minRate: parseFloat(formData.minRate),
-                skills: formData.skills.split(',').map(skill => skill.trim()) // Convert skills string to array
+                jobTitleId: parseInt(formData.jobTitleId)
             };
 
             // Append all data to FormData
-            for (const key in dataToSend) {
+            Object.keys(dataToSend).forEach(key => {
                 if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
-                    if (key === 'photo') {
-                        if (dataToSend[key]) {
-                            resumeData.append(key, dataToSend[key]);
-                        }
-                    } else {
-                        resumeData.append(key, 
-                            typeof dataToSend[key] === 'object' 
-                                ? JSON.stringify(dataToSend[key]) 
-                                : dataToSend[key]
-                        );
-                    }
+                    resumeData.append(key, 
+                        typeof dataToSend[key] === 'object' 
+                            ? JSON.stringify(dataToSend[key]) 
+                            : dataToSend[key]
+                    );
                 }
+            });
+
+            // Handle photo separately
+            if (formData.photo) {
+                resumeData.append('photo', formData.photo);
             }
 
             await resumeAPI.createResume(resumeData);
@@ -209,6 +208,7 @@ export const CandidateForm = () => {
                                     <label>Minimum Rate/h (Rs)</label>
                                     <input 
                                         type="number" 
+                                        step="0.01"
                                         className="form-control" 
                                         name="minRate"
                                         value={formData.minRate}
