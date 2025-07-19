@@ -13,6 +13,6 @@ export const getAllJobTitles = async () => {
 }
 
 export const getAllRegions = async () => {
-    return await prisma.Regions.findMany()
+    return await prisma.regions.findMany()
 }
 
