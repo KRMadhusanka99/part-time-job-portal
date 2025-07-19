@@ -8,8 +8,9 @@ export const createUser = async (user) => {
 }
 
 export const getUserById = async (id) => {
+    const userId = typeof id === 'string' ? parseInt(id, 10) : id;
     return await prisma.user.findUnique({
-        where: { id: id },
+        where: { id: userId },
         select: {
             id: true,
             firstName: true,
@@ -39,9 +40,11 @@ export const getAllUsers = async () => {
 }
 
 export const updateUser = async (id, data) => {
-    await prisma.user.update({ where: { id: id }, data: data })
+    const userId = typeof id === 'string' ? parseInt(id, 10) : id;
+    await prisma.user.update({ where: { id: userId }, data: data })
 }
 
 export const deleteUser = async (id) => {
-    await prisma.user.delete({ where: { id: id } })
+    const userId = typeof id === 'string' ? parseInt(id, 10) : id;
+    await prisma.user.delete({ where: { id: userId } })
 }

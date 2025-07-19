@@ -4,15 +4,30 @@ import { handleError } from '../utils/handleServerError.js'
 
 export const create = async (req, res) => {
     try {
-        const data = req.body
-        const existingUser = await getUserById(data.userId)
+        const data = req.body;
+        
+        // Convert numeric fields to proper types
+        const formattedData = {
+            ...data,
+            userId: parseInt(data.userId, 10),
+            regionId: parseInt(data.regionId, 10),
+            ageId: parseInt(data.ageId, 10),
+            jobTitleId: parseInt(data.jobTitleId, 10),
+            experience: parseFloat(data.experience),
+            minimumRate: parseFloat(data.minimumRate),
+            skills: typeof data.skills === 'string' ? JSON.parse(data.skills) : data.skills
+        };
+
+        const existingUser = await getUserById(formattedData.userId);
         if (!existingUser) {
-            return res.status(404).json({ message: 'User not found' })
+            return res.status(404).json({ message: 'User not found' });
         }
-        const candidateId = await resumeServices.create(data)
-        res.status(201).json({ message: 'Created successfully', candidateId })
+
+        const candidateId = await resumeServices.create(formattedData);
+        res.status(201).json({ message: 'Created successfully', candidateId });
     } catch (error) {
-        handleError(res, 'Failed to create ', error)
+        console.error('Resume creation error:', error);
+        handleError(res, 'Failed to create resume', error);
     }
 }
 
