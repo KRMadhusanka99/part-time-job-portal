@@ -126,7 +126,7 @@ export const BrowseJobs = () => {
                             <div className="col-lg-9">
                                 {currentJobs.length > 0 ? (
                                     <>
-                                        <ul className="post-job-bx">
+                                <ul className="post-job-bx">
                                             {currentJobs.map((job, index) => (
                                                 <JobCard 
                                                     key={job.id || index} 
@@ -134,7 +134,7 @@ export const BrowseJobs = () => {
                                                     modalId={`jobModal${index}`}
                                                 />
                                             ))}
-                                        </ul>
+                                                                                </ul>
                                         
                                         {/* Pagination */}
                                         <div className="pagination-bx m-t30">
@@ -145,15 +145,15 @@ export const BrowseJobs = () => {
                                                         setCurrentPage(prev => Math.max(prev - 1, 1));
                                                     }}>
                                                         <i className="ti-arrow-left"></i> Prev
-                                                    </a>
-                                                </li>
+                                        </a>
+                                    </li>
                                                 {[...Array(totalPages)].map((_, i) => (
                                                     <li key={i} className={currentPage === i + 1 ? 'active' : ''}>
                                                         <a href="#" onClick={(e) => {
                                                             e.preventDefault();
                                                             setCurrentPage(i + 1);
                                                         }}>{i + 1}</a>
-                                                    </li>
+                                    </li>
                                                 ))}
                                                 <li className={`next ${currentPage === totalPages ? 'disabled' : ''}`}>
                                                     <a href="#" onClick={(e) => {
@@ -161,15 +161,15 @@ export const BrowseJobs = () => {
                                                         setCurrentPage(prev => Math.min(prev + 1, totalPages));
                                                     }}>
                                                         Next <i className="ti-arrow-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        </a>
+                                    </li>
+                                                    </ul>
+                                                </div>
                                     </>
                                 ) : (
                                     <div className="alert alert-info">
                                         No jobs found matching your criteria. Try adjusting your filters.
-                                    </div>
+                                            </div>
                                 )}
                             </div>
                             
