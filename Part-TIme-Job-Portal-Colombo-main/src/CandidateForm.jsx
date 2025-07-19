@@ -69,7 +69,7 @@ export const CandidateForm = () => {
             // Create FormData object for file upload
             const resumeData = new FormData();
             
-            // Add all form fields
+            // Add all form fields except photo
             const dataToSend = {
                 description: formData.description,
                 minRate: formData.minRate ? parseFloat(formData.minRate) : null,
@@ -78,24 +78,20 @@ export const CandidateForm = () => {
                 userId: parseInt(userId),
                 regionId: parseInt(formData.regionId),
                 ageId: parseInt(formData.ageId),
-                jobTitleId: parseInt(formData.jobTitleId)
+                jobTitleId: parseInt(formData.jobTitleId),
+                photo: null // Set to null by default
             };
 
             // Append all data to FormData
             Object.keys(dataToSend).forEach(key => {
                 if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
-                    resumeData.append(key, 
-                        typeof dataToSend[key] === 'object' 
-                            ? JSON.stringify(dataToSend[key]) 
-                            : dataToSend[key]
-                    );
+                    if (key === 'skills') {
+                        resumeData.append(key, JSON.stringify(dataToSend[key]));
+                    } else {
+                        resumeData.append(key, dataToSend[key]);
+                    }
                 }
             });
-
-            // Handle photo separately
-            if (formData.photo) {
-                resumeData.append('photo', formData.photo);
-            }
 
             await resumeAPI.createResume(resumeData);
             alert('Resume submitted successfully!');

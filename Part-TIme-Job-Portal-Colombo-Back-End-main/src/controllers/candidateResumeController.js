@@ -8,14 +8,16 @@ export const create = async (req, res) => {
         
         // Convert numeric fields to proper types
         const formattedData = {
-            ...data,
-            userId: parseInt(data.userId, 10),
-            regionId: parseInt(data.regionId, 10),
-            ageId: parseInt(data.ageId, 10),
-            jobTitleId: parseInt(data.jobTitleId, 10),
-            experience: parseFloat(data.experience),
-            minimumRate: parseFloat(data.minimumRate),
-            skills: typeof data.skills === 'string' ? JSON.parse(data.skills) : data.skills
+            description: data.description,
+            minRate: data.minRate ? parseFloat(data.minRate) : null,
+            experience: data.experience ? parseFloat(data.experience) : null,
+            skills: typeof data.skills === 'string' ? JSON.parse(data.skills) : data.skills,
+            userId: parseInt(data.userId),
+            regionId: parseInt(data.regionId),
+            ageId: parseInt(data.ageId),
+            jobTitleId: parseInt(data.jobTitleId),
+            // Handle photo field
+            photo: null // We'll handle file upload separately later
         };
 
         const existingUser = await getUserById(formattedData.userId);
@@ -39,7 +41,6 @@ export const getAll = async (req, res) => {
         handleError(res, 'Failed to get all', error)
     }
 }
-
 
 export const getById = async (req, res) => {
     try {
@@ -84,7 +85,6 @@ export const update = async (req, res) => {
         handleError(res, 'Failed to update resume', error)
     }
 }
-
 
 export const deleteResume = async (req, res) => {
     try {

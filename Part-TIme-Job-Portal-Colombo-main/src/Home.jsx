@@ -174,7 +174,7 @@ export const Home = () => {
                         <div className="row">
                             <div className="col-lg-9">
                                 {jobs.length > 0 ? (
-                                    <ul className="post-job-bx">
+                                <ul className="post-job-bx">
                                         {jobs.map((job, index) => (
                                             <JobCard 
                                                 key={job._id || index} 
@@ -182,7 +182,7 @@ export const Home = () => {
                                                 modalId={`jobModal${index}`}
                                             />
                                         ))}
-                                    </ul>
+                                                                                </ul>
                                 ) : (
                                     <div className="alert alert-info">
                                         No jobs found. Try adjusting your search criteria.
