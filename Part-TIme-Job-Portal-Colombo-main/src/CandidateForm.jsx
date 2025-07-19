@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminAPI, resumeAPI } from './services/api';
+import { adminAPI } from './services/api';
 import { useNavigate } from 'react-router-dom';
 
 export const CandidateForm = () => {
@@ -23,22 +23,14 @@ export const CandidateForm = () => {
         const fetchRegions = async () => {
             try {
                 const response = await adminAPI.getAllRegions();
-                if (response.data) {
-                    setRegions(response.data);
-                }
+                // Map the regions data to get just the names
+                const regionNames = response.data.map(region => region.name);
+                setRegions(regionNames);
             } catch (err) {
                 console.error('Failed to fetch regions:', err);
                 setError('Failed to load regions. Please try again later.');
             }
         };
-
-        // Check if user is logged in
-        const token = localStorage.getItem('token');
-        if (!token) {
-            setError('Please login to submit your resume');
-            return;
-        }
-
         fetchRegions();
     }, []);
 
@@ -51,12 +43,10 @@ export const CandidateForm = () => {
     };
 
     const handleFileChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            setFormData(prev => ({
-                ...prev,
-                photo: e.target.files[0]
-            }));
-        }
+        setFormData(prev => ({
+            ...prev,
+            photo: e.target.files[0]
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -65,7 +55,7 @@ export const CandidateForm = () => {
         setError(null);
 
         try {
-            // Get user ID from localStorage
+            // Get user ID from localStorage (assuming it's stored during login)
             const userId = localStorage.getItem('userId');
             if (!userId) {
                 throw new Error('Please login to submit your resume');
@@ -73,46 +63,22 @@ export const CandidateForm = () => {
 
             // Create FormData object for file upload
             const resumeData = new FormData();
-            
-            // Append all form data
-            Object.keys(formData).forEach(key => {
-                if (formData[key] !== null && formData[key] !== '') {
+            for (const key in formData) {
+                if (formData[key] !== null) {
                     resumeData.append(key, formData[key]);
                 }
-            });
+            }
             resumeData.append('userId', userId);
 
-            // Submit the resume
-            const response = await resumeAPI.createResume(resumeData);
-            
-            if (response.data) {
-                alert('Resume submitted successfully!');
-                navigate('/BrowseJobs');
-            } else {
-                throw new Error('Failed to submit resume. Please try again.');
-            }
+            await adminAPI.createResume(resumeData);
+            alert('Resume submitted successfully!');
+            navigate('/BrowseJobs'); // Redirect to browse jobs page
         } catch (err) {
-            console.error('Resume submission error:', err);
-            setError(err.response?.data?.message || err.message || 'Failed to submit resume. Please try again.');
+            setError(err.message || 'Failed to submit resume. Please try again.');
         } finally {
             setLoading(false);
         }
     };
-
-    // If user is not logged in, show login message
-    if (!localStorage.getItem('token')) {
-        return (
-            <div className="content-block">
-                <div className="section-full bg-white content-inner-2">
-                    <div className="container">
-                        <div className="alert alert-warning">
-                            Please <a href="/login">login</a> to submit your resume.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div>

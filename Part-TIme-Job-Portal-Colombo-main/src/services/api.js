@@ -64,41 +64,6 @@ export const jobApplicationAPI = {
   deleteApplication: (id) => api.delete(`/job-applications/delete/${id}`),
 };
 
-// Resume related API calls
-export const resumeAPI = {
-  // Create new resume
-  createResume: (resumeData) => {
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Important for file upload
-      },
-    };
-    return api.post('/resume/create', resumeData, config);
-  },
-  
-  // Get all resumes
-  getAllResumes: () => api.get('/resume'),
-  
-  // Get resume by ID
-  getResumeById: (id) => api.get(`/resume/${id}`),
-  
-  // Get resume by user ID
-  getResumeByUserId: (userId) => api.get(`/resume/user/${userId}`),
-  
-  // Update resume
-  updateResume: (id, resumeData) => {
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Important for file upload
-      },
-    };
-    return api.patch(`/resume/update/${id}`, resumeData, config);
-  },
-  
-  // Delete resume
-  deleteResume: (id) => api.delete(`/resume/delete/${id}`),
-};
-
 // Admin related API calls
 export const adminAPI = {
   getAllRoles: () => api.get('/admin/roles'),

@@ -91,7 +91,7 @@ export const BrowseCandidates = () => {
                                                                 <li><i className="fa fa-map-marker"></i> {candidate.region}</li>
                                                                 <li><i className="fa fa-bookmark-o"></i> {candidate.professionalTitle}</li>
                                                         </ul>
-                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div className="d-flex">
                                                     <div className="job-time mr-auto">
@@ -138,8 +138,8 @@ export const BrowseCandidates = () => {
                                                                     <div className="row text-center mt-4">
                                                                         <div className="col-md-3">
                                                                                 <p><strong><i className="fa fa-map-marker"></i> {candidate.region}</strong></p>
-                                                                            </div>
-                                                                            <div className="col-md-3">
+                                                                        </div>
+                                                                        <div className="col-md-3">
                                                                                 <p><strong><i className="fa fa-briefcase"></i> {candidate.experience}</strong></p>
                                                                         </div>
                                                                         <div className="col-md-3">
