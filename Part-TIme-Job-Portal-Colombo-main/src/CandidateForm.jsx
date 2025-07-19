@@ -5,16 +5,14 @@ import { useNavigate } from 'react-router-dom';
 export const CandidateForm = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: '',
         description: '',
-        regionId: '',
-        professionalTitle: '',
+        minRate: '',
         experience: '',
         photo: null,
-        minimumRate: '',
+        skills: '',
+        regionId: '',
         jobTitleId: '',
         ageId: '',
-        skills: ''
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -79,7 +77,7 @@ export const CandidateForm = () => {
                 ageId: parseInt(formData.ageId),
                 jobTitleId: parseInt(formData.jobTitleId),
                 experience: parseFloat(formData.experience),
-                minimumRate: parseFloat(formData.minimumRate),
+                minRate: parseFloat(formData.minRate),
                 skills: formData.skills.split(',').map(skill => skill.trim()) // Convert skills string to array
             };
 
@@ -105,7 +103,7 @@ export const CandidateForm = () => {
             navigate('/browsejobs');
         } catch (err) {
             console.error('Error submitting resume:', err);
-            setError(err.message || 'Failed to submit resume. Please try again.');
+            setError(err.response?.data?.message || 'Failed to submit resume. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -121,7 +119,7 @@ export const CandidateForm = () => {
                         <div className="col-lg-8 col-md-12">
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group">
-                                    <label>Professional Title</label>
+                                    <label>Job Title</label>
                                     <select 
                                         className="form-control"
                                         name="jobTitleId"
@@ -212,8 +210,8 @@ export const CandidateForm = () => {
                                     <input 
                                         type="number" 
                                         className="form-control" 
-                                        name="minimumRate"
-                                        value={formData.minimumRate}
+                                        name="minRate"
+                                        value={formData.minRate}
                                         onChange={handleInputChange}
                                         required
                                         min="0"
