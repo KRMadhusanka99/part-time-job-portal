@@ -75,77 +75,77 @@ export const BrowseCandidates = () => {
                                     <ul className="post-job-bx">
                                         {currentCandidates.map((candidate, index) => (
                                             <li key={candidate._id || index}>
-                                                <a href="#">
-                                                    <div className="d-flex m-b30">
-                                                        <div className="job-post-company">
+                                            <a href="#">
+                                                <div className="d-flex m-b30">
+                                                    <div className="job-post-company">
                                                             <span>
                                                                 <img 
                                                                     src={candidate.photo || "assets/images/testimonials/default-avatar.jpg"} 
                                                                     alt={candidate.name}
                                                                 />
                                                             </span>
-                                                        </div>
-                                                        <div className="job-post-info">
+                                                    </div>
+                                                    <div className="job-post-info">
                                                             <h4>{candidate.name}</h4>
-                                                            <ul>
+                                                        <ul>
                                                                 <li><i className="fa fa-map-marker"></i> {candidate.region}</li>
                                                                 <li><i className="fa fa-bookmark-o"></i> {candidate.professionalTitle}</li>
-                                                            </ul>
+                                                        </ul>
                                                         </div>
-                                                    </div>
-                                                    <div className="d-flex">
-                                                        <div className="job-time mr-auto">
+                                                </div>
+                                                <div className="d-flex">
+                                                    <div className="job-time mr-auto">
                                                             <span>Expected Minimum Salary: <b>Rs. {candidate.minimumRate}</b></span>
-                                                        </div>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-primary"
-                                                            data-bs-toggle="modal"
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-primary"
+                                                        data-bs-toggle="modal"
                                                             data-bs-target={`#candidateModal${index}`}
-                                                        >
+                                                    >
                                                             View More <i className="ri-hand-heart-fill"></i>
-                                                        </button>
+                                                    </button>
 
                                                         <div className="modal fade" id={`candidateModal${index}`} tabIndex="-1">
-                                                            <div className="modal-dialog modal-lg modal-dialog-centered mt-5 pt-5">
-                                                                <div className="modal-content">
-                                                                    <div className="modal-header border-0">
+                                                        <div className="modal-dialog modal-lg modal-dialog-centered mt-5 pt-5">
+                                                            <div className="modal-content">
+                                                                <div className="modal-header border-0">
                                                                         <h5 className="modal-title">Candidate Profile</h5>
-                                                                        <button
-                                                                            type="button"
-                                                                            className="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"
-                                                                        ></button>
-                                                                    </div>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"
+                                                                    ></button>
+                                                                </div>
 
-                                                                    <div className="modal-body">
-                                                                        <div className="row g-3 align-items-start">
-                                                                            <div className="col-md-4">
-                                                                                <img
+                                                                <div className="modal-body">
+                                                                    <div className="row g-3 align-items-start">
+                                                                        <div className="col-md-4">
+                                                                            <img
                                                                                     src={candidate.photo || "assets/images/testimonials/default-avatar.jpg"}
                                                                                     alt={candidate.name}
-                                                                                    className="img-fluid rounded shadow-sm"
-                                                                                />
-                                                                            </div>
-
-                                                                            <div className="col-md-8">
-                                                                                <h4 className="fw-bold">{candidate.name}</h4>
-                                                                                <p className="text-muted small">{candidate.description}</p>
-                                                                            </div>
+                                                                                className="img-fluid rounded shadow-sm"
+                                                                            />
                                                                         </div>
 
-                                                                        <div className="row text-center mt-4">
-                                                                            <div className="col-md-3">
+                                                                        <div className="col-md-8">
+                                                                                <h4 className="fw-bold">{candidate.name}</h4>
+                                                                                <p className="text-muted small">{candidate.description}</p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="row text-center mt-4">
+                                                                        <div className="col-md-3">
                                                                                 <p><strong><i className="fa fa-map-marker"></i> {candidate.region}</strong></p>
                                                                             </div>
                                                                             <div className="col-md-3">
                                                                                 <p><strong><i className="fa fa-briefcase"></i> {candidate.experience}</strong></p>
-                                                                            </div>
-                                                                            <div className="col-md-3">
+                                                                        </div>
+                                                                        <div className="col-md-3">
                                                                                 <p><strong><i className="fa fa-usd"></i> Rs. {candidate.minimumRate}</strong></p>
-                                                                            </div>
-                                                                            <div className="col-md-3">
+                                                                        </div>
+                                                                        <div className="col-md-3">
                                                                                 <p><strong><i className="fa fa-tags"></i> {candidate.category}</strong></p>
                                                                             </div>
                                                                         </div>
@@ -153,27 +153,27 @@ export const BrowseCandidates = () => {
                                                                         <div className="mt-4">
                                                                             <h5>Skills</h5>
                                                                             <p>{candidate.skills}</p>
-                                                                        </div>
                                                                     </div>
+                                                                </div>
 
-                                                                    <div className="modal-footer border-0">
-                                                                        <button type="button" className="btn btn-primary">
-                                                                            Contact Now
-                                                                        </button>
-                                                                        <button
-                                                                            type="button"
-                                                                            className="btn btn-outline-secondary"
-                                                                            data-bs-dismiss="modal"
-                                                                        >
-                                                                            Close
-                                                                        </button>
-                                                                    </div>
+                                                                <div className="modal-footer border-0">
+                                                                    <button type="button" className="btn btn-primary">
+                                                                        Contact Now
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-outline-secondary"
+                                                                        data-bs-dismiss="modal"
+                                                                    >
+                                                                        Close
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
-                                            </li>
+                                                </div>
+                                            </a>
+                                        </li>
                                         ))}
                                     </ul>
 

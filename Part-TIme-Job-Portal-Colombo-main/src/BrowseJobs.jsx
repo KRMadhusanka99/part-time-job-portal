@@ -167,7 +167,7 @@ export const BrowseJobs = () => {
                                                             <label className="custom-control-label" htmlFor={`job${index}`}>
                                                                 {role}
                                                             </label>
-                                                        </div>
+                                                    </div>
                                                     </div>
                                                 </div>
                                             ))}
