@@ -1,136 +1,150 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Home } from './Home'
-import { Header } from './components/Header'
-import { Footer } from './components/Footer'
-// import {JobCard} from './components/JobCard'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Home } from './Home';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { Login } from './Login';
+import { SignUp } from './SignUp';
+import { AboutUs } from './AboutUs';
+import { ContactUs } from './ContactUs';
+import { BrowseJobs } from './BrowseJobs';
+import { BrowseCandidates } from './BrowseCandidates';
+import { CandidateForm } from './CandidateForm';
+import { JobAdForm } from './JobAdForm';
+import { AuthProvider } from './contexts/AuthContext';
 
-
-import { Login } from './Login'
-import { SignUp } from './SignUp'
-import { AboutUs } from './AboutUs'
-import { ContactUs } from './ContactUs'
-import { BrowseJobs } from './BrowseJobs'
-import { BrowseCandidates } from './BrowseCandidates'
-import { CandidateForm } from './CandidateForm'
-import { JobAdForm } from './JobAdForm'
-
-// import { AuthProvider } from './contexts/AuthContext'
-
+// Protected Route component
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
 
 const App = () => {
   return (
-    // <AuthProvider>
     <Router>
-      <div className="App">
-        <Routes>
-          {/* Home Page Routes */}
-          <Route
-            path="/"
-            element={
-              <>
-                <Header />
-                <Home />
-                <Footer />
-              </>
-            }
-          />
+      <AuthProvider>
+        <div className="App">
+          <Routes>
+            {/* Public Routes */}
+            <Route
+              path="/login"
+              element={
+                <>
+                  <Login />
+                  <Footer />
+                </>
+              }
+            />
 
-          {/* Login Page Routes */}
-          <Route
-            path="/Login"
-            element={
-              <>
-                <Login />
-                <Footer />
-              </>
-            }
-          />
+            <Route
+              path="/signup"
+              element={
+                <>
+                  <SignUp />
+                  <Footer />
+                </>
+              }
+            />
 
-          {/* Signup Page Route */}
-          <Route
-            path="/SignUp"
-            element={
-              <>
-                <SignUp />
-                <Footer />
-              </>
-            }
-          />
+            {/* Protected Routes */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <Home />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* ContactUs Pages */}
-          <Route path="/AboutUs"
-            element={
-              <>
-                <Header />
-                <AboutUs />
-                <Footer />
-              </>
-            }
-          />
+            <Route
+              path="/aboutus"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <AboutUs />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* ContactUs Pages */}
-          <Route path="/ContactUs"
-            element={
-              <>
-                <Header />
-                <ContactUs />
-                <Footer />
-              </>
-            }
-          />
+            <Route
+              path="/contactus"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <ContactUs />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              }
+            />
 
+            <Route
+              path="/browsejobs"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <BrowseJobs />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* BrowseJobs Pages */}
-          <Route path="/BrowseJobs"
-            element={
-              <>
-                <Header />
-                <BrowseJobs />
-                <Footer />
-              </>
-            }
-          />
+            <Route
+              path="/browsecandidates"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <BrowseCandidates />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* BrowseCandidates Pages */}
-          <Route path="/BrowseCandidates"
-            element={
-              <>
-                <Header />
-                <BrowseCandidates />
-                <Footer />
-              </>
-            }
-          />
+            <Route
+              path="/candidateform"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <CandidateForm />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              }
+            />
 
-
-          {/* CandidateForm Pages */}
-          <Route path="/CandidateForm"
-            element={
-              <>
-                <Header />
-                <CandidateForm />
-                <Footer />
-              </>
-            }
-          />
-
-          {/* JobAdForm Pages */}
-          <Route path='/JobAdForm'
-            element={
-              <>
-                <Header />
-                <JobAdForm />
-                <Footer />
-              </>
-            }
-          />
-
-        </Routes>
-      </div>
+            <Route
+              path="/jobadform"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <JobAdForm />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </div>
+      </AuthProvider>
     </Router>
-    // </AuthProvider>
-  )
+  );
 };
 
-export default App
+export default App;

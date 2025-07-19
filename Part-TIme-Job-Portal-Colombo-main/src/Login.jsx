@@ -19,11 +19,23 @@ export const Login = () => {
       });
 
       if (response.data?.token) {
+        // Store token
         localStorage.setItem('token', response.data.token);
-        navigate('/'); // redirect after login
+        
+        // Store user data
+        localStorage.setItem('userId', response.data.user.id);
+        localStorage.setItem('userRole', response.data.user.roleId);
+        localStorage.setItem('userName', `${response.data.user.firstName} ${response.data.user.lastName}`);
+        
+        // Update axios instance authorization header
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+        
+        // Navigate to home page
+        window.location.href = '/';
       }
     } catch (error) {
-      setErrorMsg(error?.message || 'Login failed');
+      console.error('Login error:', error);
+      setErrorMsg(error?.response?.data?.message || 'Login failed. Please check your credentials.');
     }
   };
 
@@ -43,7 +55,7 @@ export const Login = () => {
                 <p className="font-weight-600 text-center">If you have an account with us, please log in.</p>
 
                 {errorMsg && (
-                  <p className="text-danger text-center">{errorMsg}</p>
+                  <div className="alert alert-danger text-center">{errorMsg}</div>
                 )}
 
                 <div className="form-group">
