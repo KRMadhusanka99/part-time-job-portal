@@ -64,6 +64,27 @@ export const jobApplicationAPI = {
   deleteApplication: (id) => api.delete(`/api/application/delete/${id}`),
 };
 
+// Resume related API calls
+export const resumeAPI = {
+  // Create resume
+  createResume: (resumeData) => api.post('/api/resume/create', resumeData),
+  
+  // Get all resumes
+  getAllResumes: () => api.get('/api/resume'),
+  
+  // Get resume by ID
+  getResumeById: (id) => api.get(`/api/resume/${id}`),
+  
+  // Get resume by user ID
+  getResumeByUserId: (userId) => api.get(`/api/resume/user/${userId}`),
+  
+  // Update resume
+  updateResume: (id, resumeData) => api.patch(`/api/resume/update/${id}`, resumeData),
+  
+  // Delete resume
+  deleteResume: (id) => api.delete(`/api/resume/delete/${id}`),
+};
+
 // Admin related API calls
 export const adminAPI = {
   getAllRoles: () => api.get('/api/admin/roles'),

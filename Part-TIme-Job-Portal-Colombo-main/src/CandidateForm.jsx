@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminAPI } from './services/api';
+import { adminAPI, resumeAPI } from './services/api';
 import { useNavigate } from 'react-router-dom';
 
 export const CandidateForm = () => {
@@ -7,31 +7,38 @@ export const CandidateForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         description: '',
-        region: '',
+        regionId: '',
         professionalTitle: '',
         experience: '',
         photo: null,
         minimumRate: '',
-        category: '',
+        jobTitleId: '',
+        ageId: '',
         skills: ''
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [regions, setRegions] = useState([]);
+    const [jobTitles, setJobTitles] = useState([]);
+    const [ageGroups, setAgeGroups] = useState([]);
 
     useEffect(() => {
-        const fetchRegions = async () => {
+        const fetchData = async () => {
             try {
-                const response = await adminAPI.getAllRegions();
-                // Map the regions data to get just the names
-                const regionNames = response.data.map(region => region.name);
-                setRegions(regionNames);
+                const [regionsRes, jobTitlesRes, ageGroupsRes] = await Promise.all([
+                    adminAPI.getAllRegions(),
+                    adminAPI.getAllJobTitles(),
+                    adminAPI.getAllAgeGroups()
+                ]);
+                setRegions(regionsRes.data);
+                setJobTitles(jobTitlesRes.data);
+                setAgeGroups(ageGroupsRes.data);
             } catch (err) {
-                console.error('Failed to fetch regions:', err);
-                setError('Failed to load regions. Please try again later.');
+                console.error('Failed to fetch data:', err);
+                setError('Failed to load form data. Please try again later.');
             }
         };
-        fetchRegions();
+        fetchData();
     }, []);
 
     const handleInputChange = (e) => {
@@ -55,7 +62,7 @@ export const CandidateForm = () => {
         setError(null);
 
         try {
-            // Get user ID from localStorage (assuming it's stored during login)
+            // Get user ID from localStorage
             const userId = localStorage.getItem('userId');
             if (!userId) {
                 throw new Error('Please login to submit your resume');
@@ -63,17 +70,41 @@ export const CandidateForm = () => {
 
             // Create FormData object for file upload
             const resumeData = new FormData();
-            for (const key in formData) {
-                if (formData[key] !== null) {
-                    resumeData.append(key, formData[key]);
+            
+            // Add all form fields
+            const dataToSend = {
+                ...formData,
+                userId: parseInt(userId),
+                regionId: parseInt(formData.regionId),
+                ageId: parseInt(formData.ageId),
+                jobTitleId: parseInt(formData.jobTitleId),
+                experience: parseFloat(formData.experience),
+                minimumRate: parseFloat(formData.minimumRate),
+                skills: formData.skills.split(',').map(skill => skill.trim()) // Convert skills string to array
+            };
+
+            // Append all data to FormData
+            for (const key in dataToSend) {
+                if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
+                    if (key === 'photo') {
+                        if (dataToSend[key]) {
+                            resumeData.append(key, dataToSend[key]);
+                        }
+                    } else {
+                        resumeData.append(key, 
+                            typeof dataToSend[key] === 'object' 
+                                ? JSON.stringify(dataToSend[key]) 
+                                : dataToSend[key]
+                        );
+                    }
                 }
             }
-            resumeData.append('userId', userId);
 
-            await adminAPI.createResume(resumeData);
+            await resumeAPI.createResume(resumeData);
             alert('Resume submitted successfully!');
-            navigate('/BrowseJobs'); // Redirect to browse jobs page
+            navigate('/browsejobs');
         } catch (err) {
+            console.error('Error submitting resume:', err);
             setError(err.message || 'Failed to submit resume. Please try again.');
         } finally {
             setLoading(false);
@@ -90,15 +121,21 @@ export const CandidateForm = () => {
                         <div className="col-lg-8 col-md-12">
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group">
-                                    <label>Your name</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control" 
-                                        name="name"
-                                        value={formData.name}
+                                    <label>Professional Title</label>
+                                    <select 
+                                        className="form-control"
+                                        name="jobTitleId"
+                                        value={formData.jobTitleId}
                                         onChange={handleInputChange}
-                                        required 
-                                    />
+                                        required
+                                    >
+                                        <option value="">Select Job Title</option>
+                                        {jobTitles.map((title) => (
+                                            <option key={title.id} value={title.id}>
+                                                {title.title}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="form-group">
                                     <label>Description</label>
@@ -108,43 +145,54 @@ export const CandidateForm = () => {
                                         value={formData.description}
                                         onChange={handleInputChange}
                                         required
+                                        placeholder="Describe your experience and qualifications"
                                     ></textarea>
                                 </div>
                                 <div className="form-group">
                                     <label>Region</label>
                                     <select 
                                         className="form-control"
-                                        name="region"
-                                        value={formData.region}
+                                        name="regionId"
+                                        value={formData.regionId}
                                         onChange={handleInputChange}
                                         required
                                     >
                                         <option value="">Select Region</option>
-                                        {regions.map((region, index) => (
-                                            <option key={index} value={region}>{region}</option>
+                                        {regions.map((region) => (
+                                            <option key={region.id} value={region.id}>
+                                                {region.name}
+                                            </option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="form-group">
-                                    <label>Professional title</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control" 
-                                        name="professionalTitle"
-                                        value={formData.professionalTitle}
+                                    <label>Age Group</label>
+                                    <select 
+                                        className="form-control"
+                                        name="ageId"
+                                        value={formData.ageId}
                                         onChange={handleInputChange}
                                         required
-                                    />
+                                    >
+                                        <option value="">Select Age Group</option>
+                                        {ageGroups.map((age) => (
+                                            <option key={age.id} value={age.id}>
+                                                {age.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="form-group">
-                                    <label>Experience</label>
+                                    <label>Experience (years)</label>
                                     <input 
-                                        type="text" 
+                                        type="number" 
+                                        step="0.1"
                                         className="form-control" 
                                         name="experience"
                                         value={formData.experience}
                                         onChange={handleInputChange}
                                         required
+                                        min="0"
                                     />
                                 </div>
                                 <div className="form-group">
@@ -160,7 +208,7 @@ export const CandidateForm = () => {
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label>Minimum rate/h (Rs)</label>
+                                    <label>Minimum Rate/h (Rs)</label>
                                     <input 
                                         type="number" 
                                         className="form-control" 
@@ -168,34 +216,18 @@ export const CandidateForm = () => {
                                         value={formData.minimumRate}
                                         onChange={handleInputChange}
                                         required
+                                        min="0"
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Resume category</label>
-                                    <select 
-                                        className="form-control"
-                                        name="category"
-                                        value={formData.category}
-                                        onChange={handleInputChange}
-                                        required
-                                    >
-                                        <option value="">Select Category</option>
-                                        <option value="Design">Design</option>
-                                        <option value="Construction">Construction</option>
-                                        <option value="Food Service">Food Service</option>
-                                        <option value="Customer Service">Customer Service</option>
-                                        <option value="Event Management">Event Management</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label>Skills</label>
+                                    <label>Skills (comma-separated)</label>
                                     <input 
                                         type="text" 
                                         className="form-control" 
                                         name="skills"
                                         value={formData.skills}
                                         onChange={handleInputChange}
-                                        placeholder="Separate skills with commas"
+                                        placeholder="e.g., Customer Service, Communication, Time Management"
                                         required
                                     />
                                 </div>
