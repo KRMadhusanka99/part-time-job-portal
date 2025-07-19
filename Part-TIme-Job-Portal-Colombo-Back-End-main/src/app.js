@@ -13,7 +13,10 @@ const app = express()
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173', // or whatever your frontend URL is
+  credentials: true
+}));
 
 app.get('/', (req, res) => {
     res.send('Welcome to Job Portal')
