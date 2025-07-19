@@ -22,54 +22,54 @@ api.interceptors.request.use((config) => {
 // Job related API calls
 export const jobAPI = {
   // Get all jobs
-  getAllJobs: () => api.get('/jobs'),
+  getAllJobs: () => api.get('/api/job'),
   
   // Get job by ID
-  getJobById: (id) => api.get(`/jobs/${id}`),
+  getJobById: (id) => api.get(`/api/job/${id}`),
   
   // Get jobs by user ID (employer's jobs)
-  getJobsByUserId: (userId) => api.get(`/jobs/user/${userId}`),
+  getJobsByUserId: (userId) => api.get(`/api/job/user/${userId}`),
   
   // Create new job
-  createJob: (jobData) => api.post('/jobs/create', jobData),
+  createJob: (jobData) => api.post('/api/job/create', jobData),
   
   // Update job
-  updateJob: (id, jobData) => api.patch(`/jobs/update/${id}`, jobData),
+  updateJob: (id, jobData) => api.patch(`/api/job/update/${id}`, jobData),
   
   // Delete job
-  deleteJob: (id) => api.delete(`/jobs/delete/${id}`),
+  deleteJob: (id) => api.delete(`/api/job/delete/${id}`),
 };
 
 // Job application related API calls
 export const jobApplicationAPI = {
   // Create job application
-  createApplication: (applicationData) => api.post('/job-applications/create', applicationData),
+  createApplication: (applicationData) => api.post('/api/application/create', applicationData),
   
   // Get all applications
-  getAllApplications: () => api.get('/job-applications'),
+  getAllApplications: () => api.get('/api/application'),
   
   // Get application by ID
-  getApplicationById: (id) => api.get(`/job-applications/${id}`),
+  getApplicationById: (id) => api.get(`/api/application/${id}`),
   
   // Get applications by candidate ID
-  getApplicationsByCandidateId: (candidateId) => api.get(`/job-applications/candidate/${candidateId}`),
+  getApplicationsByCandidateId: (candidateId) => api.get(`/api/application/candidate/${candidateId}`),
   
   // Get applications by job ID
-  getApplicationsByJobId: (jobId) => api.get(`/job-applications/job/${jobId}`),
+  getApplicationsByJobId: (jobId) => api.get(`/api/application/job/${jobId}`),
   
   // Update application
-  updateApplication: (id, applicationData) => api.patch(`/job-applications/update/${id}`, applicationData),
+  updateApplication: (id, applicationData) => api.patch(`/api/application/update/${id}`, applicationData),
   
   // Delete application
-  deleteApplication: (id) => api.delete(`/job-applications/delete/${id}`),
+  deleteApplication: (id) => api.delete(`/api/application/delete/${id}`),
 };
 
 // Admin related API calls
 export const adminAPI = {
-  getAllRoles: () => api.get('/admin/roles'),
-  getAllAgeGroups: () => api.get('/admin/ages'),
-  getAllRegions: () => api.get('/admin/regions'),
-  getAllJobTitles: () => api.get('/admin/jobs'),
+  getAllRoles: () => api.get('/api/admin/roles'),
+  getAllAgeGroups: () => api.get('/api/admin/ages'),
+  getAllRegions: () => api.get('/api/admin/regions'),
+  getAllJobTitles: () => api.get('/api/admin/jobs'),
 };
 
 export default api; 
